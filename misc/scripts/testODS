@@ -1,0 +1,16 @@
+#!/bin/sh
+
+APPHOME=/home/slb/patrondb/
+cd ${APPHOME}/classes
+
+for i in `ls ${APPHOME}/lib/*.jar`
+do
+CLASSPATH=$i:$CLASSPATH
+done
+
+export CLASSPATH
+
+/usr/bin/java LoadCourseStudents 1148
+
+
+

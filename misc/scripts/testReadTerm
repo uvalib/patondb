@@ -1,0 +1,17 @@
+#!/bin/sh
+
+HOMEUSER=slb
+APPHOME=/home/${HOMEUSER}/patrondb/
+cd ${APPHOME}/classes
+CURRTERM="1152"
+
+for i in `ls ${APPHOME}/lib/*.jar`
+do
+CLASSPATH=$i:$CLASSPATH
+done
+
+export CLASSPATH
+
+/usr/bin/java ReadTermData "${CURRTERM}"
+
+

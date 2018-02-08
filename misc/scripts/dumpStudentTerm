@@ -1,0 +1,23 @@
+#!/bin/sh
+
+HOMEUSER=slb
+APPHOME=/home/${HOMEUSER}/patrondb/
+cd ${APPHOME}/classes
+CURRTERM="1161"
+
+for i in `ls ${APPHOME}/lib/*.jar`
+do
+CLASSPATH=$i:$CLASSPATH
+done
+
+export CLASSPATH
+
+/usr/bin/java DumpStudentTerm "${CURRTERM}"
+#/usr/bin/java DumpStudentTerm
+
+
+/usr/bin/ssh idm@rijl.lib.virginia.edu "/bin/mv /home/idm/sirsi-feed-student.older /home/idm/sirsi-feed-student.oldest"
+/usr/bin/ssh idm@rijl.lib.virginia.edu "/bin/mv /home/idm/sirsi-feed-student.old /home/idm/sirsi-feed-student.older"
+/usr/bin/ssh idm@rijl.lib.virginia.edu "/bin/mv /home/idm/sirsi-feed-student /home/idm/sirsi-feed-student.old"
+/usr/bin/scp /home/${HOMEUSER}/sirsi-feed-student idm@rijl.lib.virginia.edu:/home/idm
+

@@ -1,0 +1,148 @@
+<project name="patrondb" default="compile" basedir=".">
+
+  <property file="build.properties"/>
+  <property file="${user.home}/build.properties"/>
+
+
+  <property name="app.name"      	value="patrondb"/>
+  <property name="app.path"      	value="/${app.name}"/>
+  <property name="build.home"    	value="${basedir}/build"/>
+  <property name="misc.home"    	value="${basedir}/misc"/>
+  <property name="dist.home"     	value="${basedir}/dist"/>
+  <property name="docs.home"     	value="${basedir}/docs"/>
+  <property name="src.home"      	value="${basedir}/src"/>
+  <property name="lib.home"		value="${basedir}/lib"/>
+  <property name="compile.debug"       	value="true"/>
+  <property name="compile.deprecation" 	value="true"/>
+  <property name="compile.optimize"    	value="true"/>
+
+
+<property name="log4j.jar" value="${lib.home}/log4j.jar" />
+<property name="mysql-connector.jar" value="${lib.home}/mysql-connector.jar" />
+<property name="ojdbc.jar" value="${lib.home}/ojdbc.jar" />
+
+
+
+  <path id="compile.classpath">
+	<pathelement location="${log4j.jar}" />
+	<pathelement location="${mysql-connector.jar}" />
+	<pathelement location="${ojdbc.jar}" />
+
+  </path>
+
+
+
+<!-- ==================== All Target ====================================== -->
+  <target name="all" depends="clean,compile"
+   description="Clean build and dist directories, then compile"/>
+
+
+
+<!-- ==================== Clean Target ==================================== -->
+  <target name="clean"
+   description="Delete old build and dist directories">
+    <delete dir="${build.home}"/>
+    <delete dir="${dist.home}"/>
+  </target>
+
+
+
+<!-- ==================== Compile Target ================================== -->
+  <target name="compile" depends="prepare"
+   description="Compile Java sources">
+
+    <!-- Compile Java classes as necessary -->
+    <mkdir    dir="${build.home}/classes"/>
+    <javac includeantruntime="false" srcdir="${src.home}"
+          destdir="${build.home}/classes"
+            debug="${compile.debug}"
+      deprecation="${compile.deprecation}"
+         optimize="${compile.optimize}">
+        <classpath refid="compile.classpath"/>
+	<compilerarg value="-Xlint:unchecked"/>
+    </javac>
+
+    <!-- Copy application resources -->
+    <copy  todir="${build.home}/classes">
+      <fileset dir="${src.home}" excludes="**/*.java"/>
+    </copy>
+
+  </target>
+
+
+
+<!-- ==================== Dist Target ===================================== -->
+  <target name="dist" depends="compile,javadoc"
+   description="Create binary distribution">
+
+    <!-- Copy documentation subdirectories -->
+    <mkdir   dir="${dist.home}/docs"/>
+    <copy    todir="${dist.home}/docs">
+      <fileset dir="${docs.home}"/>
+    </copy>
+
+    <buildnumber file="dist.number"/>
+
+    <!-- Create application JAR file -->
+    <jar jarfile="${dist.home}/${app.name}-${build.number}.war"
+         basedir="${build.home}"/>
+    <jar jarfile="${dist.home}/${app.name}-${build.number}.war"
+         basedir="${build.home}" update="true" includes="misc/logs" />
+
+  </target>
+
+
+
+<!-- ==================== Javadoc Target ================================== -->
+
+<!--
+
+  The "javadoc" target creates Javadoc API documentation for the Java
+  classes included in your application.  Normally, this is only required
+  when preparing a distribution release, but is available as a separate
+  target in case the developer wants to create Javadocs independently.
+
+-->
+
+  <target name="javadoc" depends="compile"
+   description="Create Javadoc API documentation">
+<!--
+
+    <mkdir          dir="${dist.home}/docs/api"/>
+    <javadoc sourcepath="${src.home}"
+                destdir="${dist.home}/docs/api"
+           packagenames="*">
+      <classpath refid="compile.classpath"/>
+    </javadoc>
+-->
+
+  </target>
+
+<!-- ==================== Prepare Target ================================== -->
+  <target name="prepare">
+
+    <!-- Create build directories as needed -->
+    <mkdir  dir="${build.home}"/>
+    <mkdir  dir="${build.home}/classes"/>
+    <mkdir  dir="${build.home}/misc"/>
+    <mkdir  dir="${build.home}/misc/logs"/>
+    <mkdir  dir="${build.home}/misc/scripts"/>
+
+    <!-- Copy static content of this application -->
+    <copy  todir="${build.home}/misc/scripts">
+      <fileset dir="${misc.home}/scripts" />
+    </copy>
+
+    <!-- Copy external dependencies as required -->
+    <!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
+    <mkdir  dir="${build.home}/lib"/>
+    <copy todir="${build.home}/lib" file="${log4j.jar}"/>
+    <copy todir="${build.home}/lib" file="${mysql-connector.jar}"/>
+    <copy todir="${build.home}/lib" file="${ojdbc.jar}"/>
+    
+
+
+
+  </target>
+
+</project>

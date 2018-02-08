@@ -1,0 +1,13 @@
+#!/bin/sh
+
+APPHOME=/home/idm/udb_processing/nightly
+cd ${APPHOME}/classes
+
+for i in `ls ${APPHOME}/lib/*.jar`
+do
+CLASSPATH=$i:$CLASSPATH
+done
+
+export CLASSPATH
+
+/usr/bin/java LoadUserDBFeed $1 
