@@ -310,7 +310,7 @@ public class NewDumpStudentTerm {
 
     public static void main(String[] args) throws IOException {
 	String term = "0991";
-	String studentFileName = "/home/slb/sirsi-feed-student";
+	String studentFileName = "~/sirsi-feed-student";
         ArrayList<String> acadPlans;
 	PrintWriter studentTermWriter = null;
 	PropertyConfigurator.configure("config/sis-pub-load-log4j.properties");

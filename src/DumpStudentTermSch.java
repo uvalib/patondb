@@ -230,7 +230,7 @@ public class DumpStudentTermSch {
 
     public static void main(String[] args) throws IOException {
 	String term = "0991";
-	String studentFileName = "/home/slb/sirsi-feed-student";
+	String studentFileName = "~/sirsi-feed-student";
 	PrintWriter studentTermWriter = null;
 	PropertyConfigurator.configure("config/patronload-log4j.properties");
 	if (args.length < 1 ) {
